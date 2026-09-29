@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【姓名】- 求职简历</title>
+<!-- 左侧深色侧栏 · 经典两栏 CV · 通用/外企/转行岗 -->
+<!-- @resume-meta
+{
+  "template": "sidebar",
+  "label": "左侧深色侧栏",
+  "colorMode": "light",
+  "styleHint": "clean corporate illustration, soft neutral ground, calm structural shapes kept to the outer margin, no glow, very low contrast",
+  "palette": { "primary": "#3d7ea6", "accent": "#c9a66b", "bg": "#ffffff", "card": "#1f2b38", "ink": "#1a1a1a" },
+  "zones": {
+    "content":   [0.04, 0.02, 0.92, 0.96],
+    "photo":     [0.04, 0.04, 0.26, 0.15],
+    "decorBand": 0.04
+  },
+  "size": "2304x3264"
+}
+-->
+<style>
+:root{
+  --ink:#1a1a1a;
+  --muted:#5f6b78;
+  --line:#e4e7ea;
+  --bg:#ffffff;
+  --rail:#1f2b38;        /* 侧栏底色 */
+  --rail-ink:#e9eef4;    /* 侧栏文字 */
+  --rail-muted:#9db0c2;  /* 侧栏次要文字 */
+  --primary:#3d7ea6;     /* 章节小标题 / 强调 */
+  --accent:#c9a66b;      /* 极少量点缀（分隔短线） */
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --rail-w:268px;
+
+  /* —— 插画模式（illustrated）—— 未启用时以下变量均不生效，基础模式零影响 */
+  --bg-image:none;                  /* 由 scripts/gen-background.js --apply 注入 url("…") */
+  --scrim:rgba(255,255,255,.88);    /* 右栏（浅色）半透明，让底图透出一点 */
+  --scrim-rail:rgba(31,43,56,.90);  /* 左栏（深色）同样半透明，保持同一层氛围 */
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* 背景图层：只作氛围底，不参与打印 */
+.bg-layer{position:fixed;inset:0;z-index:-1;display:none;background:var(--bg) center/cover no-repeat;}
+.mode-illustrated{background:transparent;}
+.mode-illustrated .bg-layer{display:block;background-image:var(--bg-image);}
+.mode-illustrated .page{background:transparent;}   /* 否则页面白底会挡住底图，两栏的 scrim 就白做了 */
+.mode-illustrated main{background:var(--scrim);}
+.mode-illustrated aside{background:var(--scrim-rail);}
+
+body{font-family:var(--sans);background:#eef0f2;color:var(--ink);line-height:1.72;padding:0;}
+.page{max-width:794px;margin:0 auto;display:grid;grid-template-columns:var(--rail-w) 1fr;
+  background:var(--bg);box-shadow:0 6px 32px rgba(20,30,40,.10);min-height:1123px;}
+
+/* ── 左栏：联系 / 技能 / 证书 ───────────────────── */
+aside{background:var(--rail);color:var(--rail-ink);padding:38px 26px 42px;}
+.photo{position:relative;width:118px;height:150px;margin:0 auto 26px;cursor:pointer;
+  background:rgba(255,255,255,.08);border:1px solid rgba(233,238,244,.35);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;transition:border-color .2s;}
+.photo:hover{border-color:var(--accent);}
+.photo .ph-hint{font-size:10.5px;color:var(--rail-muted);text-align:center;line-height:1.5;letter-spacing:.5px;}
+.photo .photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.photo.has-photo .ph-hint{display:none;}
+.photo.has-photo .photo-preview{display:block;}
+.photo input{display:none;}
+
+.block{margin-top:26px;}
+.block h2{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);
+  padding-bottom:9px;margin-bottom:11px;border-bottom:1px solid rgba(233,238,244,.16);}
+.block li,.block p{font-size:12.5px;line-height:1.85;list-style:none;color:var(--rail-ink);word-break:break-all;}
+.block .k{color:var(--rail-muted);}
+/* 技能条：细强调块 + 文字，比一排胶囊更克制 */
+.skill{font-size:12.5px;padding:2px 0 2px 11px;position:relative;color:var(--rail-ink);}
+.skill::before{content:"";position:absolute;left:0;top:.72em;width:4px;height:4px;background:var(--primary);}
+
+/* ── 右栏：姓名 / 项目 / 教育 ───────────────────── */
+main{padding:40px 36px 44px;}
+.masthead{padding-bottom:18px;border-bottom:2px solid var(--rail);}
+.name{font-size:37px;font-weight:700;letter-spacing:4px;line-height:1.25;}
+.role{margin-top:7px;font-size:14px;color:var(--primary);letter-spacing:.3px;}
+section{margin-top:24px;}
+section h2{font-size:11.5px;font-weight:700;letter-spacing:3px;color:var(--rail);
+  padding-bottom:8px;margin-bottom:13px;border-bottom:1px solid var(--line);}
+.entry{margin-bottom:15px;}
+.entry:last-child{margin-bottom:0;}
+.entry .top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;}
+.entry h3{font-size:14.5px;font-weight:600;}
+.entry .when{font-size:12px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.entry .org{font-size:12.5px;color:var(--muted);margin-top:1px;}
+.entry ul{list-style:none;margin-top:5px;}
+.entry li{position:relative;padding-left:13px;font-size:13.5px;color:#3a3a3a;margin-top:3px;}
+.entry li::before{content:"";position:absolute;left:1px;top:.72em;width:4px;height:4px;background:var(--primary);opacity:.55;}
+.summary{font-size:13.5px;color:#3a3a3a;}
+
+@media(max-width:640px){
+  .page{grid-template-columns:1fr;min-height:0;}
+  aside{padding:30px 22px 32px;}
+  main{padding:28px 22px 32px;}
+  .name{font-size:29px;letter-spacing:2px;}
+  .entry .top{flex-direction:column;gap:2px;}
+}
+
+@media print{
+  @page{size:A4;margin:0;}   /* 显式 A4：不写 size 会跟随系统默认（美制机器上是 Letter） */
+  /* ── 默认：投递用 PDF 不带插画底（HR 多半黑白打印）── */
+  body{background:#fff;}
+  .bg-layer{display:none !important;}
+  .page{box-shadow:none;min-height:0;max-width:none;width:100%;}
+  /* ⚠ 深色侧栏是背景色 —— 没勾「背景图形」时不会印，白字就全没了。
+     所以默认打印把它降级成浅面板 + 深字：不依赖背景也能读，两栏结构仍然在。
+     想要深色侧栏打印出来，就加 class="print-with-bg" 并勾上「背景图形」。 */
+  aside{background:#f2f4f7;}
+  aside,.block h2,.block li,.block p,.skill,.photo .ph-hint{color:#1a1a1a;}
+  .block .k{color:#666;}
+  .block h2{border-bottom-color:#d8dde2;}
+  .skill::before{background:#5f6b78;}
+  .photo{background:#fff;border-color:#c8ced4;}
+
+  /* ── 可选：带底图打印 —— 给 body 标签加 class="print-with-bg" 即启用（默认不带）。
+         ⚠ 必须在打印对话框勾上「背景图形 / Background graphics」，否则会打出一张白纸。── */
+  body.print-with-bg{background:var(--bg) var(--bg-image) center/cover no-repeat;}
+  body.print-with-bg main{background:var(--scrim);}
+  body.print-with-bg aside{background:var(--rail);}
+  body.print-with-bg aside,body.print-with-bg .block li,body.print-with-bg .block p,
+  body.print-with-bg .skill{color:var(--rail-ink);}
+  body.print-with-bg .block h2{color:var(--accent);border-bottom-color:rgba(233,238,244,.16);}
+  body.print-with-bg .block .k{color:var(--rail-muted);}
+  body.print-with-bg .skill::before{background:var(--primary);}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="page">
+  <aside>
+    <label class="photo" title="点击上传一寸证件照">
+      <input type="file" accept="image/*">
+      <span class="ph-hint">点击上传<br>一寸证件照</span>
+      <img class="photo-preview" alt="证件照">
+    </label>
+
+    <div class="block">
+      <h2>联系方式</h2>
+      <ul>
+        <li>【城市】</li>
+        <li>【邮箱】</li>
+        <li>【电话】</li>
+      </ul>
+    </div>
+
+    <div class="block">
+      <h2>技能</h2>
+      <div class="skill">【技能 A】</div>
+      <div class="skill">【技能 B】</div>
+      <div class="skill">【技能 C】</div>
+      <div class="skill">【技能 D】</div>
+    </div>
+
+    <div class="block">
+      <h2>证书</h2>
+      <ul><li>【证书 A】</li><li>【证书 B】</li></ul>
+    </div>
+  </aside>
+
+  <main>
+    <div class="masthead">
+      <div class="name">【姓名】</div>
+      <div class="role">【求职意向】 · 【一句话定位】</div>
+    </div>
+
+    <section>
+      <h2>项目经历</h2>
+      <div class="entry">
+        <div class="top"><h3>【项目 / 课设名称】</h3><div class="when">2022.03 — 至今</div></div>
+        <div class="org">【课程设计 / 公司】 · 【角色】</div>
+        <ul>
+          <li>【做了什么，用了什么工具或方法】</li>
+          <li>【拿到什么结果；有数字就写数字】</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="top"><h3>【项目 / 课设名称】</h3><div class="when">2020.06 — 2022.02</div></div>
+        <div class="org">【课程设计 / 公司】 · 【角色】</div>
+        <ul><li>【成果】</li></ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>教育</h2>
+      <div class="entry">
+        <div class="top"><h3>【学校】 · 【专业】</h3><div class="when">20XX — 20XX</div></div>
+        <div class="org">【学历 · 学位】</div>
+        <ul><li>主修课程：【课程 A、课程 B、课程 C】</li></ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>自我评价</h2>
+      <div class="summary">【一到两句，写你的定位与能做什么，别写套话】</div>
+    </section>
+  </main>
+</div>
+<script>
+(function(){
+  document.querySelectorAll('.photo').forEach(function(label){
+    var input=label.querySelector('input[type=file]');
+    var preview=label.querySelector('.photo-preview');
+    input.addEventListener('change',function(){
+      var f=input.files[0]; if(!f) return;
+      var url=URL.createObjectURL(f);
+      preview.onload=function(){ URL.revokeObjectURL(url); };
+      preview.src=url;
+      label.classList.add('has-photo');
+    });
+  });
+})();
+</script>
+</body>
+</html>

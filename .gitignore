@@ -2,3 +2,6 @@
 *.exe
 .DS_Store
 Thumbs.db
+
+# 密钥不进版本库（生成的 output/ 不忽略，方便当示例素材提交）
+scripts/.ark_key

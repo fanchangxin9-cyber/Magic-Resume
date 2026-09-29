@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【姓名】- 求职简历</title>
+<!-- 极简衬线 · 单栏 · 日期左栏 · 发型线分隔 · 技术/工程岗 -->
+<!-- @resume-meta
+{
+  "template": "serif",
+  "label": "极简衬线",
+  "colorMode": "light",
+  "styleHint": "quiet editorial illustration, warm off-white ground, hairline rules, a single restrained ink accent, no glow, very low contrast",
+  "palette": { "primary": "#1f3a5f", "accent": "#8a6f4e", "bg": "#fbfaf8", "card": "#ffffff", "ink": "#1a1a1a" },
+  "zones": {
+    "content":   [0.04, 0.02, 0.92, 0.96],
+    "photo":     [0.80, 0.05, 0.16, 0.13],
+    "decorBand": 0.04
+  },
+  "size": "2304x3264"
+}
+-->
+<style>
+:root{
+  --ink:#1a1a1a;
+  --muted:#6b6b6b;
+  --faint:#9a9a9a;
+  --line:#e3e0da;
+  --line-strong:#cfc9bf;
+  --bg:#fbfaf8;
+  --card:#ffffff;
+  --primary:#1f3a5f;   /* 墨蓝 · 章节与规则线 */
+  --accent:#8a6f4e;    /* 古铜 · 极少量点缀 */
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+  --serif:Georgia,'Times New Roman','Songti SC','SimSun',serif;
+  --gap:26px;          /* 章节之间 */
+  --radius:0;
+
+  /* —— 插画模式（illustrated）—— 未启用时以下变量均不生效，基础模式零影响 */
+  --bg-image:none;                 /* 由 scripts/gen-background.js --apply 注入 url("…") */
+  --scrim:rgba(255,255,255,.88);   /* 浅色系用半透明白压住底图，保住正文可读性 */
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* 背景图层：只作氛围底，不参与打印 */
+.bg-layer{position:fixed;inset:0;z-index:-1;display:none;background:var(--bg) center/cover no-repeat;}
+.mode-illustrated{background:transparent;}
+.mode-illustrated .bg-layer{display:block;background-image:var(--bg-image);}
+.mode-illustrated .page{background:var(--scrim);padding:38px 40px 44px;}
+
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.75;padding:56px 24px;}
+.page{max-width:760px;margin:0 auto;}
+
+/* ── 页眉 ───────────────────────────────── */
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:28px;
+  padding-bottom:20px;border-bottom:1px solid var(--line-strong);}
+.head .id{flex:1;min-width:0;}
+.name{font-family:var(--serif);font-size:40px;font-weight:500;letter-spacing:5px;line-height:1.25;color:var(--ink);}
+.role{margin-top:8px;font-size:14.5px;color:var(--primary);letter-spacing:.3px;}
+.contact{margin-top:12px;font-size:12.5px;color:var(--muted);letter-spacing:.4px;}
+
+/* 证件照占位：克制的细边框竖版，无装饰 */
+.photo{position:relative;flex:0 0 auto;width:92px;height:118px;background:var(--card);
+  border:1px solid var(--line-strong);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;transition:border-color .2s;}
+.photo:hover{border-color:var(--primary);}
+.photo .ph-hint{font-size:10.5px;color:var(--faint);text-align:center;line-height:1.45;letter-spacing:.5px;}
+.photo .photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.photo.has-photo .ph-hint{display:none;}
+.photo.has-photo .photo-preview{display:block;}
+.photo input{display:none;}
+
+/* ── 章节 ───────────────────────────────── */
+section{margin-top:var(--gap);}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.sec-head h2{font-size:11.5px;font-weight:600;letter-spacing:3.5px;color:var(--primary);white-space:nowrap;}
+.sec-head::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* 条目：日期占左侧窄栏，内容右栏 —— 强对齐是这份模板的骨架 */
+.entry{display:grid;grid-template-columns:112px 1fr;gap:22px;padding-bottom:16px;}
+.entry:last-child{padding-bottom:0;}
+.entry + .entry{padding-top:16px;border-top:1px dashed var(--line);}
+.when{font-size:12px;color:var(--faint);letter-spacing:.4px;padding-top:2px;font-variant-numeric:tabular-nums;}
+.what h3{font-size:15px;font-weight:600;letter-spacing:.2px;color:var(--ink);}
+.what .org-line{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.what ul{list-style:none;margin-top:6px;}
+.what li{position:relative;padding-left:14px;font-size:13.5px;color:#3d3d3d;margin-top:3px;}
+.what li::before{content:"";position:absolute;left:2px;top:.72em;width:4px;height:1px;background:var(--accent);}
+
+/* 技能：左标签右内容的对齐表，比一排胶囊更稳 */
+.facts{display:grid;grid-template-columns:112px 1fr;gap:8px 22px;font-size:13.5px;}
+.facts dt{color:var(--faint);font-size:12px;letter-spacing:.4px;padding-top:1px;}
+.facts dd{color:#3d3d3d;}
+.facts dd span + span::before{content:"·";margin:0 8px;color:var(--line-strong);}
+
+.tags{display:flex;flex-wrap:wrap;gap:6px 8px;}
+.tags span{font-size:12.5px;color:#3d3d3d;border-bottom:1px solid var(--line-strong);padding-bottom:1px;}
+
+@media(max-width:600px){
+  body{padding:30px 16px;}
+  .head{flex-direction:column;align-items:flex-start;gap:18px;}
+  .name{font-size:31px;letter-spacing:3px;}
+  .entry,.facts{grid-template-columns:1fr;gap:6px;}
+  .when{padding-top:0;}
+}
+
+@media print{
+  @page{size:A4;margin:0;}   /* 显式 A4：不写 size 会跟随系统默认（美制机器上是 Letter）；页边距交给 body padding */
+  /* ── 默认：投递用 PDF 不带插画底（HR 多半黑白打印）—— 这份模板本来就是浅底深字，无需降级 ── */
+  body{background:#fff;padding:14mm;}
+  .bg-layer{display:none !important;}
+  .mode-illustrated .page{background:transparent;padding:0;}
+  .when,.facts dt{color:#666;}          /* 屏幕上的浅灰在白纸上会发虚 */
+  .head{padding-bottom:16px;}
+  .photo{border-color:#bbb;}
+
+  /* ── 可选：带底图打印 —— 给 body 标签加 class="print-with-bg" 即启用（默认不带）。
+         ⚠ 必须在打印对话框勾上「背景图形 / Background graphics」，否则会打出一张白纸。── */
+  body.print-with-bg{background:var(--bg) var(--bg-image) center/cover no-repeat;}
+  body.print-with-bg .page{background:var(--scrim);padding:38px 40px 44px;}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="page">
+  <div class="head">
+    <div class="id">
+      <div class="name">【姓名】</div>
+      <div class="role">【求职意向】 · 【一句话定位】</div>
+      <div class="contact">【城市】 · 【邮箱】 · 【电话】</div>
+    </div>
+    <label class="photo" title="点击上传一寸证件照">
+      <input type="file" accept="image/*">
+      <span class="ph-hint">点击上传<br>一寸证件照</span>
+      <img class="photo-preview" alt="证件照">
+    </label>
+  </div>
+
+  <section>
+    <div class="sec-head"><h2>项目经历</h2></div>
+    <div class="entry">
+      <div class="when">2022.03 — 至今</div>
+      <div class="what">
+        <h3>【项目 / 课设名称】</h3>
+        <div class="org-line">【课程设计 / 公司】 · 【角色】</div>
+        <ul>
+          <li>【做了什么，用了什么工具或方法】</li>
+          <li>【拿到什么结果；有数字就写数字】</li>
+        </ul>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="when">2020.06 — 2022.02</div>
+      <div class="what">
+        <h3>【项目 / 课设名称】</h3>
+        <div class="org-line">【课程设计 / 公司】 · 【角色】</div>
+        <ul><li>【成果】</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>技能</h2></div>
+    <div class="facts">
+      <dt>语言</dt><dd><span>技能 A</span><span>技能 B</span></dd>
+      <dt>工具</dt><dd><span>技能 C</span><span>技能 D</span></dd>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>教育</h2></div>
+    <div class="entry">
+      <div class="when">20XX — 20XX</div>
+      <div class="what">
+        <h3>【学校】 · 【专业】</h3>
+        <div class="org-line">【学历 · 学位】</div>
+        <ul><li>主修课程：【课程 A、课程 B、课程 C】</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>证书 / 作品</h2></div>
+    <div class="tags">
+      <span>【证书 A】</span><span>【证书 B】</span><span>【链接 / 开源项目】</span>
+    </div>
+  </section>
+</div>
+<script>
+(function(){
+  document.querySelectorAll('.photo').forEach(function(label){
+    var input=label.querySelector('input[type=file]');
+    var preview=label.querySelector('.photo-preview');
+    input.addEventListener('change',function(){
+      var f=input.files[0]; if(!f) return;
+      var url=URL.createObjectURL(f);
+      preview.onload=function(){ URL.revokeObjectURL(url); };
+      preview.src=url;
+      label.classList.add('has-photo');
+    });
+  });
+})();
+</script>
+</body>
+</html>

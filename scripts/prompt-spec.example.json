@@ -1,0 +1,6 @@
+{
+  "_comment": "四栏拆解。推荐只写 background / decoration 两栏 —— style / global 由 --template 的 @resume-meta 自动推导（安全区、配色不用手填）。想覆盖哪栏就补上哪栏，写了就以你写的为准。",
+  "_usage": "node scripts/gen-background.js --template banner --spec scripts/prompt-spec.example.json --dry-run",
+  "background": "A vertical dreamy backdrop: one smooth gradient flowing from pale lavender (#eef0ff) at the top through soft periwinkle to faint blue-white at the bottom, airy and luminous, with a whisper of fine grain.",
+  "decoration": "A few translucent bubbles and soft four-point sparkles drifting only along the outer margin band, very low contrast."
+}

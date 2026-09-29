@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【姓名】- 求职简历</title>
+<!-- 商务横向分区 · 藏蓝横带页眉 · 满宽分区 · 通用/商务岗 -->
+<!-- @resume-meta
+{
+  "template": "banner",
+  "label": "商务横向分区",
+  "colorMode": "light",
+  "styleHint": "understated corporate illustration, clean neutral ground, one calm horizontal band near the top, hairlines only, no glow, very low contrast",
+  "palette": { "primary": "#1e3a5f", "accent": "#b08d57", "bg": "#ffffff", "card": "#eef1f5", "ink": "#1c1c1c" },
+  "zones": {
+    "content":   [0.04, 0.02, 0.92, 0.96],
+    "photo":     [0.79, 0.035, 0.17, 0.14],
+    "decorBand": 0.04
+  },
+  "size": "2304x3264"
+}
+-->
+<style>
+:root{
+  --ink:#1c1c1c;
+  --muted:#5b6472;
+  --faint:#98a2b3;
+  --line:#e4e7ec;
+  --line-2:#cfd6df;
+  --bg:#ffffff;
+  --card:#eef1f5;      /* 打印降级后的横带底色 */
+  --primary:#1e3a5f;   /* 藏蓝 · 横带与标题 */
+  --accent:#b08d57;    /* 哑金 · 横带下的分割线 */
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;
+
+  /* —— 插画模式（illustrated）—— 未启用时以下变量均不生效，基础模式零影响 */
+  --bg-image:none;                 /* 由 scripts/gen-background.js --apply 注入 url("…") */
+  --scrim:rgba(255,255,255,.89);   /* 浅色系用半透明白压住底图 */
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* 背景图层：只作氛围底，不参与打印 */
+.bg-layer{position:fixed;inset:0;z-index:-1;display:none;background:var(--bg) center/cover no-repeat;}
+.mode-illustrated{background:transparent;}
+.mode-illustrated .bg-layer{display:block;background-image:var(--bg-image);}
+.mode-illustrated .page{background:var(--scrim);padding:0 34px 40px;}
+
+body{font-family:var(--sans);background:#eef0f3;color:var(--ink);line-height:1.72;padding:38px 20px;}
+.page{max-width:790px;margin:0 auto;background:var(--bg);box-shadow:0 4px 24px rgba(20,30,40,.07);}
+
+/* ── 藏蓝横带页眉：这份模板的视觉重心 ───────────── */
+.head{background:var(--primary);color:#fff;padding:26px 30px 24px;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:28px;}
+.head .id{flex:1;min-width:0;}
+.name{font-size:36px;font-weight:700;letter-spacing:4px;line-height:1.2;color:#fff;}
+.role{margin-top:7px;font-size:14px;color:rgba(255,255,255,.95);letter-spacing:.2px;}
+.tagline{margin-top:3px;font-size:12.5px;color:rgba(255,255,255,.72);}
+.contact{margin-top:12px;font-size:12.5px;color:rgba(255,255,255,.72);}
+.contact span + span::before{content:"";display:inline-block;width:3px;height:3px;
+  background:rgba(255,255,255,.45);border-radius:50%;vertical-align:middle;margin:0 9px;}
+.accent-rule{height:3px;background:var(--accent);}
+
+.photo{position:relative;flex:0 0 auto;width:98px;height:122px;cursor:pointer;
+  background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.45);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;transition:border-color .2s;}
+.photo:hover{border-color:var(--accent);}
+.photo .ph-hint{font-size:10.5px;color:rgba(255,255,255,.75);text-align:center;line-height:1.5;letter-spacing:.5px;}
+.photo .photo-preview{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.photo.has-photo .ph-hint{display:none;}
+.photo.has-photo .photo-preview{display:block;}
+.photo input{display:none;}
+
+.body{padding:24px 30px 34px;}
+
+/* ── 分区：满宽横条，标题挂在金色左条上 ───────────── */
+section{margin-top:22px;}
+section:first-child{margin-top:0;}
+.sec-head{display:flex;align-items:center;border-bottom:1px solid var(--line-2);padding-bottom:9px;margin-bottom:14px;}
+.sec-head h2{font-size:13px;font-weight:600;letter-spacing:2.5px;color:var(--primary);
+  padding-left:12px;position:relative;}
+.sec-head h2::before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:4px;height:16px;background:var(--accent);}
+
+.entry{margin-bottom:16px;}
+.entry:last-child{margin-bottom:0;}
+.entry .row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
+.entry h3{font-size:14.5px;font-weight:600;}
+.entry .when{font-size:12px;color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums;}
+.entry .org{font-size:12.5px;color:var(--muted);margin-top:2px;}
+.entry ul{list-style:none;margin-top:6px;}
+.entry li{position:relative;padding-left:13px;font-size:13.5px;color:#333;margin-top:3px;}
+.entry li::before{content:"";position:absolute;left:1px;top:.72em;width:4px;height:1px;background:var(--accent);}
+
+/* 技能 / 证书：两列表格化，满宽横带里最像"商务"的部分 */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 34px;}
+.cols .kv{display:flex;gap:12px;font-size:13.5px;padding:7px 0;border-bottom:1px solid var(--line);}
+.cols .kv .k{color:var(--faint);font-size:12.5px;min-width:56px;flex:0 0 auto;}
+.summary{font-size:13.5px;color:#333;margin-top:12px;}
+
+@media(max-width:620px){
+  body{padding:18px 12px;}
+  .head{flex-direction:column;align-items:flex-start;gap:16px;padding:22px 20px 20px;}
+  .name{font-size:29px;letter-spacing:2px;}
+  .body{padding:20px 20px 28px;}
+  .cols{grid-template-columns:1fr;}
+  .entry .row{flex-direction:column;gap:1px;}
+}
+
+@media print{
+  @page{size:A4;margin:0;}   /* 显式 A4：不写 size 会跟随系统默认（美制机器上是 Letter） */
+  /* ── 默认：投递用 PDF 不带插画底（HR 多半黑白打印）── */
+  body{background:#fff;padding:0;}
+  .page{box-shadow:none;max-width:none;width:100%;}
+  .bg-layer{display:none !important;}
+  /* ⚠ 藏蓝横带是背景色 —— 没勾「背景图形」时不会印，白字就全没了。
+     所以默认打印把它降级成浅灰带 + 深字：不依赖背景也能读，横带的分量还在。 */
+  .head{background:var(--card);color:var(--ink);}
+  .name{color:var(--primary);}
+  .role{color:#333;}
+  .tagline,.contact{color:var(--muted);}
+  .contact span + span::before{background:var(--line-2);}
+  .photo{background:#fff;border-color:#b9c2cc;}
+  .photo .ph-hint{color:var(--faint);}
+  .entry .when,.cols .kv .k{color:#6b7280;}
+
+  /* ── 可选：带底图打印 —— 给 body 标签加 class="print-with-bg" 即启用（默认不带）。
+         ⚠ 必须在打印对话框勾上「背景图形 / Background graphics」，否则会打出一张白纸。── */
+  body.print-with-bg{background:var(--bg) var(--bg-image) center/cover no-repeat;}
+  body.print-with-bg .page{background:var(--scrim);}
+  body.print-with-bg .head{background:var(--primary);color:#fff;}
+  body.print-with-bg .name{color:#fff;}
+  body.print-with-bg .role{color:rgba(255,255,255,.95);}
+  body.print-with-bg .tagline,body.print-with-bg .contact{color:rgba(255,255,255,.72);}
+  body.print-with-bg .photo{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.45);}
+  body.print-with-bg .photo .ph-hint{color:rgba(255,255,255,.75);}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer" aria-hidden="true"></div>
+<div class="page">
+  <div class="head">
+    <div class="id">
+      <div class="name">【姓名】</div>
+      <div class="role">【求职意向】</div>
+      <div class="tagline">【一句话定位：几年经验 / 擅长什么 / 拿到过什么结果】</div>
+      <div class="contact"><span>【城市】</span><span>【邮箱】</span><span>【电话】</span></div>
+    </div>
+    <label class="photo" title="点击上传一寸证件照">
+      <input type="file" accept="image/*">
+      <span class="ph-hint">点击上传<br>一寸证件照</span>
+      <img class="photo-preview" alt="证件照">
+    </label>
+  </div>
+  <div class="accent-rule"></div>
+
+  <div class="body">
+    <section>
+      <div class="sec-head"><h2>工作 / 项目经历</h2></div>
+      <div class="entry">
+        <div class="row"><h3>【公司 / 项目名】</h3><div class="when">2022.03 — 至今</div></div>
+        <div class="org">【职位】 · 【业务线 / 团队】</div>
+        <ul>
+          <li>【做了什么；用"动作 + 结果"写，有数字就写数字】</li>
+          <li>【第二项成果】</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><h3>【公司 / 项目名】</h3><div class="when">2020.06 — 2022.02</div></div>
+        <div class="org">【职位】</div>
+        <ul><li>【成果】</li></ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>技能</h2></div>
+      <div class="cols">
+        <div class="kv"><span class="k">类别 A</span><span>【技能 1、技能 2】</span></div>
+        <div class="kv"><span class="k">类别 B</span><span>【技能 3、技能 4】</span></div>
+        <div class="kv"><span class="k">类别 C</span><span>【技能 5】</span></div>
+        <div class="kv"><span class="k">类别 D</span><span>【技能 6】</span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>教育</h2></div>
+      <div class="entry">
+        <div class="row"><h3>【学校】 · 【专业】</h3><div class="when">20XX — 20XX</div></div>
+        <div class="org">【学历 · 学位】　主修课程：【课程 A、课程 B】</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-head"><h2>证书 / 自我评价</h2></div>
+      <div class="cols">
+        <div class="kv"><span class="k">证书</span><span>【证书 A】  【证书 B】</span></div>
+        <div class="kv"><span class="k">作品</span><span>【链接 / 开源项目】</span></div>
+      </div>
+      <div class="summary">【一到两句，写你的定位与能做什么，别写套话】</div>
+    </section>
+  </div>
+</div>
+<script>
+(function(){
+  document.querySelectorAll('.photo').forEach(function(label){
+    var input=label.querySelector('input[type=file]');
+    var preview=label.querySelector('.photo-preview');
+    input.addEventListener('change',function(){
+      var f=input.files[0]; if(!f) return;
+      var url=URL.createObjectURL(f);
+      preview.onload=function(){ URL.revokeObjectURL(url); };
+      preview.src=url;
+      label.classList.add('has-photo');
+    });
+  });
+})();
+</script>
+</body>
+</html>
