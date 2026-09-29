@@ -1,0 +1,4 @@
+.git-installer.exe
+*.exe
+.DS_Store
+Thumbs.db
